@@ -18,6 +18,8 @@ enum class ttype {
 	RBRACE,
 	LBRACK,
 	RBRACK,
+	ILIT,
+	FLIT,
 };
 
 struct token {

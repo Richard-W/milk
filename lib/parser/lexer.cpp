@@ -55,10 +55,10 @@ lexer::lexer(const file& file) {
 		}
 
 		// Identifier or keyword
-		if (std::isalnum(buffer[0])) {
+		if (std::isalpha(buffer[0])) {
 			token tok;
 			size_t tpos = pos;
-			while ((std::isalnum(buffer[0]) || buffer[0] == '_') && !buffer.empty()) {
+			while (!buffer.empty() && (std::isalnum(buffer[0]) || buffer[0] == '_')) {
 				tok.text.push_back(buffer[0]);
 				pop;
 			}
@@ -74,6 +74,30 @@ lexer::lexer(const file& file) {
 			} else {
 				tok.type = ttype::ID;
 			}
+			m_tokens.emplace_back(std::move(tok));
+			continue;
+		}
+
+		// Numeric literal
+		if (std::isdigit(buffer[0])) {
+			token tok;
+			size_t tpos = pos;
+			while (!buffer.empty() && std::isdigit(buffer[0])) {
+				tok.text.push_back(buffer[0]);
+				pop;
+			}
+			if (!buffer.empty() && buffer[0] == '.' && std::isdigit(buffer[1])) {
+				tok.type = ttype::FLIT;
+				tok.text.push_back(buffer[0]);
+				pop;
+				while (!buffer.empty() && std::isdigit(buffer[0])) {
+					tok.text.push_back(buffer[0]);
+					pop;
+				}
+			} else {
+				tok.type = ttype::ILIT;
+			}
+			tok.ref = file_ref(file, tpos, tok.text.size());
 			m_tokens.emplace_back(std::move(tok));
 			continue;
 		}
@@ -128,6 +152,8 @@ lexer::lexer(const file& file) {
 			pop;
 			continue;
 		}
+
+		throw std::runtime_error("Unrecognized char");
 	}
 }
 

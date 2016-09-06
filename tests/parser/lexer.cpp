@@ -38,3 +38,23 @@ TEST(lexer, key_id_comment) {
 	ASSERT_EQ("ghi", lexer.get().text);
 	lexer.advance();
 }
+
+TEST(lexer, literals) {
+	std::ofstream os("./lexer_literals.milk");
+	os << "123 123.0 1291" << std::endl;
+
+	milk::file file("./lexer_literals.milk");
+	milk::lexer lexer(file);
+
+	ASSERT_EQ(milk::ttype::ILIT, lexer.get().type);
+	ASSERT_EQ("123", lexer.get().text);
+	lexer.advance();
+
+	ASSERT_EQ(milk::ttype::FLIT, lexer.get().type);
+	ASSERT_EQ("123.0", lexer.get().text);
+	lexer.advance();
+
+	ASSERT_EQ(milk::ttype::ILIT, lexer.get().type);
+	ASSERT_EQ("1291", lexer.get().text);
+	lexer.advance();
+}
