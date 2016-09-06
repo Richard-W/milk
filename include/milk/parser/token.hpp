@@ -20,6 +20,7 @@ enum class ttype {
 	RBRACK,
 	ILIT,
 	FLIT,
+	SLIT,
 };
 
 struct token {

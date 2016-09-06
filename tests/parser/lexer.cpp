@@ -41,7 +41,7 @@ TEST(lexer, key_id_comment) {
 
 TEST(lexer, literals) {
 	std::ofstream os("./lexer_literals.milk");
-	os << "123 123.0 1291" << std::endl;
+	os << "123 123.0 1291 \"abc\" \"\\\"\"" << std::endl;
 
 	milk::file file("./lexer_literals.milk");
 	milk::lexer lexer(file);
@@ -56,5 +56,13 @@ TEST(lexer, literals) {
 
 	ASSERT_EQ(milk::ttype::ILIT, lexer.get().type);
 	ASSERT_EQ("1291", lexer.get().text);
+	lexer.advance();
+
+	ASSERT_EQ(milk::ttype::SLIT, lexer.get().type);
+	ASSERT_EQ("abc", lexer.get().text);
+	lexer.advance();
+
+	ASSERT_EQ(milk::ttype::SLIT, lexer.get().type);
+	ASSERT_EQ("\"", lexer.get().text);
 	lexer.advance();
 }

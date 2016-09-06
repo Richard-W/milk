@@ -102,6 +102,53 @@ lexer::lexer(const file& file) {
 			continue;
 		}
 
+		// String literal
+		if (buffer[0] == '"') {
+			token tok;
+			size_t tpos = pos;
+			size_t length_offset = 2;
+			pop;
+			while (!buffer.empty() && buffer[0] != '"') {
+				if (buffer[0] == '\\' && buffer.size() > 1) {
+					switch (buffer[1]) {
+					case 'n':
+						tok.text.push_back('\n');
+						++length_offset;
+						break;
+					case 't':
+						tok.text.push_back('\t');
+						++length_offset;
+						break;
+					case '\"':
+						tok.text.push_back('\"');
+						++length_offset;
+						break;
+					case '\\':
+						tok.text.push_back('\\');
+						++length_offset;
+						break;
+					default:
+						tok.text.push_back(buffer[0]);
+						tok.text.push_back(buffer[1]);
+						break;
+					}
+					pop;
+					pop;
+				} else {
+					tok.text.push_back(buffer[0]);
+					pop;
+				}
+			}
+			if (buffer.empty()) {
+				throw std::runtime_error("unterminated string");
+			}
+			pop;
+			tok.ref = file_ref(file, tpos, tok.text.size() + length_offset);
+			tok.type = ttype::SLIT;
+			m_tokens.emplace_back(std::move(tok));
+			continue;
+		}
+
 		// Special characters
 		if (buffer[0] == '(') {
 			token tok;
