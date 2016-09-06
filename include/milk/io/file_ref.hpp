@@ -22,9 +22,11 @@ private:
 	size_t m_pos;
 	size_t m_len;
 
-	size_t m_line = 0;
-	size_t m_col = 0;
-	std::string m_line_str;
+	mutable size_t m_line = 0;
+	mutable size_t m_col = 0;
+	mutable std::string m_line_str;
+
+	void eval() const;
 };
 
 } // namespace milk
