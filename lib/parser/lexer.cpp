@@ -7,8 +7,6 @@
 buffer.pop_front(); \
 ++pos
 
-#define chk_empty \
-
 namespace milk {
 
 lexer::lexer(const file& file) {
