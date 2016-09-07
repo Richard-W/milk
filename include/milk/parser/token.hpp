@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../util/header_guard.hpp"
+
 #include "../io/file.hpp"
 #include "../io/file_ref.hpp"
 
@@ -21,6 +23,8 @@ enum class ttype {
 	ILIT,
 	FLIT,
 	SLIT,
+	NS,
+	DOT,
 };
 
 struct token {

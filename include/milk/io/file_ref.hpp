@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../util/header_guard.hpp"
+
 #include "file.hpp"
 
 #include <cstddef>

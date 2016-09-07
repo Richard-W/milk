@@ -69,6 +69,8 @@ lexer::lexer(const file& file) {
 				tok.type = ttype::FOR;
 			} else if (tok.text == "while") {
 				tok.type = ttype::WHILE;
+			} else if (tok.text == "namespace") {
+				tok.type = ttype::NS;
 			} else {
 				tok.type = ttype::ID;
 			}
@@ -192,6 +194,14 @@ lexer::lexer(const file& file) {
 			token tok;
 			tok.text = "]";
 			tok.type = ttype::RBRACK;
+			tok.ref = file_ref(file, pos, 1);
+			m_tokens.emplace_back(std::move(tok));
+			pop;
+			continue;
+		} else if (buffer[0] == '.') {
+			token tok;
+			tok.text = ".";
+			tok.type = ttype::DOT;
 			tok.ref = file_ref(file, pos, 1);
 			m_tokens.emplace_back(std::move(tok));
 			pop;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../util/header_guard.hpp"
+
 #include "token.hpp"
 
 #include "../io/file.hpp"

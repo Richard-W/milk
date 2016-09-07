@@ -4,6 +4,7 @@ if (GTEST_FOUND)
 		"io/file.cpp"
 		"io/file_ref.cpp"
 		"parser/lexer.cpp"
+		"parser/parser.cpp"
 	)
 	target_link_libraries(tests PRIVATE
 		milk
