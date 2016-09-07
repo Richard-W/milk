@@ -12,6 +12,10 @@ TEST(parser, namespaces) {
 		<< "namespace bar {" << std::endl
 		<< "	namespace baz {" << std::endl
 		<< "	}" << std::endl
+		<< "}" << std::endl
+		<< "namespace foo {" << std::endl
+		<< "	namespace foobar {" << std::endl
+		<< "	}" << std::endl
 		<< "}" << std::endl;
 
 	milk::file file("./parser_namespaces.milk");
@@ -24,6 +28,7 @@ TEST(parser, namespaces) {
 	}
 
 	ASSERT_EQ("foo", root.children[0]->name);
+	ASSERT_EQ("foobar", root.children[0]->children[0]->name);
 	ASSERT_EQ("bar", root.children[1]->name);
 	ASSERT_EQ("baz", root.children[1]->children[0]->name);
 }

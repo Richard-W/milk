@@ -17,6 +17,8 @@ public:
 	ast_symbol* parent = nullptr;
 	std::vector<ast_symbol*> children;
 
+	ast_symbol* find_child(const std::string& name);
+
 	virtual void accept(visitor&) override;
 };
 

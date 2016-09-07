@@ -8,4 +8,14 @@ ast_symbol::accept(visitor& visitor) {
 	ast_node::accept(visitor);
 }
 
+ast_symbol*
+ast_symbol::find_child(const std::string& name) {
+	for (auto child: children) {
+		if (child->name == name) {
+			return child;
+		}
+	}
+	return nullptr;
+}
+
 } // namespace milk

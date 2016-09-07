@@ -8,7 +8,14 @@ namespace milk {
 void parse_symbol(ast_symbol& parent, lexer& lexer) {
 	switch (lexer.get().type) {
 	case ttype::NS:
-		parse_namespace(dynamic_cast<ast_namespace&>(parent), lexer);
+		ast_namespace* ns;
+		try {
+			ns = &dynamic_cast<ast_namespace&>(parent);
+		} catch (...) {
+			std::cerr << lexer.get().ref.pretty_string() << std::endl;
+			std::runtime_error("parent of namespace must be a namespace too");
+		}
+		parse_namespace(*ns, lexer);
 		break;
 	default:
 		std::cerr << lexer.get().ref.pretty_string() << std::endl;
@@ -18,21 +25,27 @@ void parse_symbol(ast_symbol& parent, lexer& lexer) {
 
 void parse_namespace(ast_namespace& parent, lexer& lexer) {
 	lexer.expect(ttype::NS);
-	lexer.advance();
 
-	ast_namespace* current = new ast_namespace();
-	parent.children.emplace_back(current);
-	current->name = lexer.expect(ttype::ID).text;
-	lexer.advance();
-
-	while (lexer.get().type == ttype::DOT) {
+	ast_namespace* current = &parent;
+	do {
 		lexer.advance();
 
-		current->children.emplace_back(new ast_namespace());
-		current = dynamic_cast<ast_namespace*>(current->children.back());
-		current->name = lexer.expect(ttype::ID).text;
+		auto name = lexer.expect(ttype::ID).text;
+		auto child = current->find_child(name);
+		if (child) {
+			current = dynamic_cast<ast_namespace*>(child);
+			if (!current) {
+				std::cerr << lexer.get().ref.pretty_string() << std::endl;
+				throw std::runtime_error("symbol exists and is no namespace");
+			}
+		} else {
+			current->children.emplace_back(new ast_namespace());
+			current = static_cast<ast_namespace*>(current->children.back());
+			current->name = name;
+		}
+
 		lexer.advance();
-	}
+	} while(lexer.get().type == ttype::DOT);
 
 	lexer.expect(ttype::LBRACE);
 	lexer.advance();
