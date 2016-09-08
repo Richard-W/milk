@@ -27,6 +27,9 @@ enum class ttype {
 	DOT,
 	COL,
 	DCOL,
+	FN,
+	COMMA,
+	ASSIGN,
 };
 
 struct token {

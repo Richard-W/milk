@@ -8,5 +8,11 @@ ast_type::accept(visitor& visitor) {
 	ast_symbol::accept(visitor);
 }
 
+void
+ast_type_ref::accept(visitor& visitor) {
+	visitor.visit(*this);
+	ast_type::accept(visitor);
+}
+
 } // namespace milk
 

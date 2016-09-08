@@ -1,6 +1,7 @@
 #include <milk/parser/lexer.hpp>
 
 #include <deque>
+#include <iostream>
 #include <stdexcept>
 
 #define pop \
@@ -71,6 +72,8 @@ lexer::lexer(const file& file) {
 				tok.type = ttype::WHILE;
 			} else if (tok.text == "namespace") {
 				tok.type = ttype::NS;
+			} else if (tok.text == "fn") {
+				tok.type = ttype::FN;
 			} else {
 				tok.type = ttype::ID;
 			}
@@ -198,6 +201,22 @@ lexer::lexer(const file& file) {
 			m_tokens.emplace_back(std::move(tok));
 			pop;
 			continue;
+		} else if (buffer[0] == ',') {
+			token tok;
+			tok.text = ",";
+			tok.type = ttype::COMMA;
+			tok.ref = file_ref(file, pos, 1);
+			m_tokens.emplace_back(std::move(tok));
+			pop;
+			continue;
+		} else if (buffer[0] == '=') {
+			token tok;
+			tok.text = "=";
+			tok.type = ttype::ASSIGN;
+			tok.ref = file_ref(file, pos, 1);
+			m_tokens.emplace_back(std::move(tok));
+			pop;
+			continue;
 		} else if (buffer[0] == '.') {
 			token tok;
 			tok.text = ".";
@@ -245,6 +264,7 @@ token
 lexer::expect(ttype type, size_t index) {
 	token tok = get(index);
 	if (tok.type != type) {
+		std::cerr << tok.ref.pretty_string() << std::endl;
 		throw std::runtime_error("lexer expectation failed");
 	}
 	return tok;
