@@ -8,6 +8,8 @@ class ast_node;
 class ast_symbol;
 class ast_type;
 class ast_expr;
+class ast_namespace;
+class ast_func;
 
 class visitor {
 public:
@@ -15,6 +17,8 @@ public:
 	virtual void visit(ast_symbol&) {}
 	virtual void visit(ast_type&) {}
 	virtual void visit(ast_expr&) {}
+	virtual void visit(ast_namespace&) {}
+	virtual void visit(ast_func&) {}
 };
 
 } // namespace milk
