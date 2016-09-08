@@ -45,7 +45,7 @@ void parse_namespace(ast_namespace& parent, lexer& lexer) {
 		}
 
 		lexer.advance();
-	} while(lexer.get().type == ttype::DOT);
+	} while(lexer.get().type == ttype::DCOL);
 
 	lexer.expect(ttype::LBRACE);
 	lexer.advance();

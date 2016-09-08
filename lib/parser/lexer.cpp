@@ -208,6 +208,23 @@ lexer::lexer(const file& file) {
 			continue;
 		}
 
+		if (buffer[0] == ':') {
+			token tok;
+			size_t tpos = pos;
+			tok.text.push_back(buffer[0]);
+			pop;
+			if (!buffer.empty() && buffer[0] == ':') {
+				tok.text.push_back(buffer[0]);
+				pop;
+				tok.type = ttype::DCOL;
+			} else {
+				tok.type = ttype::COL;
+			}
+			tok.ref = file_ref(file, tpos, tok.text.size());
+			m_tokens.emplace_back(std::move(tok));
+			continue;
+		}
+
 		throw std::runtime_error("Unrecognized char");
 	}
 }

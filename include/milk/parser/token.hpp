@@ -25,6 +25,8 @@ enum class ttype {
 	SLIT,
 	NS,
 	DOT,
+	COL,
+	DCOL,
 };
 
 struct token {

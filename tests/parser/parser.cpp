@@ -16,6 +16,10 @@ TEST(parser, namespaces) {
 		<< "namespace foo {" << std::endl
 		<< "	namespace foobar {" << std::endl
 		<< "	}" << std::endl
+		<< "}" << std::endl
+		<< "namespace foo::bar {" << std::endl
+		<< "	namespace baz {" << std::endl
+		<< "	}" << std::endl
 		<< "}" << std::endl;
 
 	milk::file file("./parser_namespaces.milk");
