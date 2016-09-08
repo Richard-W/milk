@@ -9,6 +9,7 @@ public:
 	ast_var() = default;
 
 	ast_type* type;
+	ast_expr* expr;
 
 	virtual void accept(visitor&) override;
 };
