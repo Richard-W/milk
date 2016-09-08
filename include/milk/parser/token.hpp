@@ -30,6 +30,11 @@ enum class ttype {
 	FN,
 	COMMA,
 	ASSIGN,
+	PLUS,
+	MINUS,
+	TIMES,
+	DIV,
+	POW,
 };
 
 struct token {

@@ -116,10 +116,89 @@ void parse_function(ast_symbol& parent, lexer& lexer) {
 	}
 }
 
+// Left recursive expression parser
+ast_expr* parse_add_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs = nullptr);
+ast_expr* parse_mul_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs = nullptr);
+ast_expr* parse_exp_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs = nullptr);
+ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer);
+
 ast_expr* parse_expression(ast_symbol& parent, lexer& lexer) {
-#pragma unused(parent)
-#pragma unused(lexer)
-	throw std::runtime_error("not implemented");
+	return parse_add_expression(parent, lexer);
+}
+
+/* The following three function implement the parsing of arithmetic expressions
+ * in the correct order.
+ *
+ * Take the expression 2 - 2 - 2
+ * The correct parenthesised expression would be
+ * (2 - 2) - 2 = -2
+ *
+ * A naive right-recursive approach would yield
+ * 2 - (2 - 2) = 2
+ */
+
+ast_expr* parse_add_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs) {
+	if (!lhs) {
+		lhs = parse_mul_expression(parent, lexer);
+	}
+	if (lexer.get().type == ttype::PLUS || lexer.get().type == ttype::MINUS) {
+		auto bin = new ast_bin_expr();
+		bin->op = lexer.get().text;
+		lexer.advance();
+		bin->lhs = lhs;
+		bin->rhs = parse_mul_expression(parent, lexer);
+		return parse_add_expression(parent, lexer, bin);
+	} else {
+		return lhs;
+	}
+}
+
+ast_expr* parse_mul_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs) {
+	if (!lhs) {
+		lhs = parse_exp_expression(parent, lexer);
+	}
+	if (lexer.get().type == ttype::TIMES || lexer.get().type == ttype::DIV) {
+		auto bin = new ast_bin_expr();
+		bin->op = lexer.get().text;
+		lexer.advance();
+		bin->lhs = lhs;
+		bin->rhs = parse_exp_expression(parent, lexer);
+		return parse_mul_expression(parent, lexer, bin);
+	} else {
+		return lhs;
+	}
+}
+
+ast_expr* parse_exp_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs) {
+	if (!lhs) {
+		lhs = parse_primary_expression(parent, lexer);
+	}
+	if (lexer.get().type == ttype::TIMES || lexer.get().type == ttype::DIV) {
+		auto bin = new ast_bin_expr();
+		bin->op = lexer.get().text;
+		lexer.advance();
+		bin->lhs = lhs;
+		bin->rhs = parse_primary_expression(parent, lexer);
+		return parse_exp_expression(parent, lexer, bin);
+	} else {
+		return lhs;
+	}
+}
+
+ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer) {
+	ast_expr* expr;
+	switch (lexer.get().type) {
+	case ttype::LPAR:
+		lexer.advance();
+		expr = parse_expression(parent, lexer);
+		lexer.expect(ttype::RPAR);
+		lexer.advance();
+		break;
+	default:
+		std::cerr << lexer.get().ref.pretty_string() << std::endl;
+		throw std::runtime_error("Expected expression");
+	}
+	return expr;
 }
 
 } // namespace milk

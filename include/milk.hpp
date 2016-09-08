@@ -6,6 +6,7 @@
 #include "milk/ast/ast_symbol.hpp"
 #include "milk/ast/ast_type.hpp"
 #include "milk/ast/ast_expr.hpp"
+#include "milk/ast/ast_bin_expr.hpp"
 #include "milk/ast/ast_namespace.hpp"
 #include "milk/ast/ast_func.hpp"
 #include "milk/ast/ast_var.hpp"

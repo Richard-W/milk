@@ -217,6 +217,46 @@ lexer::lexer(const file& file) {
 			m_tokens.emplace_back(std::move(tok));
 			pop;
 			continue;
+		} else if (buffer[0] == '+') {
+			token tok;
+			tok.text = "+";
+			tok.type = ttype::PLUS;
+			tok.ref = file_ref(file, pos, 1);
+			m_tokens.emplace_back(std::move(tok));
+			pop;
+			continue;
+		} else if (buffer[0] == '-') {
+			token tok;
+			tok.text = "-";
+			tok.type = ttype::MINUS;
+			tok.ref = file_ref(file, pos, 1);
+			m_tokens.emplace_back(std::move(tok));
+			pop;
+			continue;
+		} else if (buffer[0] == '*') {
+			token tok;
+			tok.text = "*";
+			tok.type = ttype::TIMES;
+			tok.ref = file_ref(file, pos, 1);
+			m_tokens.emplace_back(std::move(tok));
+			pop;
+			continue;
+		} else if (buffer[0] == '/') {
+			token tok;
+			tok.text = "/";
+			tok.type = ttype::DIV;
+			tok.ref = file_ref(file, pos, 1);
+			m_tokens.emplace_back(std::move(tok));
+			pop;
+			continue;
+		} else if (buffer[0] == '^') {
+			token tok;
+			tok.text = "^";
+			tok.type = ttype::POW;
+			tok.ref = file_ref(file, pos, 1);
+			m_tokens.emplace_back(std::move(tok));
+			pop;
+			continue;
 		} else if (buffer[0] == '.') {
 			token tok;
 			tok.text = ".";
