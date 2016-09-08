@@ -11,6 +11,7 @@ class visitor;
 class ast_node {
 public:
 	ast_node() = default;
+	virtual ~ast_node() = default;
 
 	virtual void accept(visitor&);
 };

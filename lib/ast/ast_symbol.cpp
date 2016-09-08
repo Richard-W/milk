@@ -8,6 +8,12 @@ ast_symbol::accept(visitor& visitor) {
 	ast_node::accept(visitor);
 }
 
+ast_symbol::~ast_symbol() {
+	for (auto child: children) {
+		delete child;
+	}
+}
+
 ast_symbol*
 ast_symbol::find_child(const std::string& name) {
 	for (auto child: children) {

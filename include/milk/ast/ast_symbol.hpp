@@ -12,6 +12,7 @@ namespace milk {
 class ast_symbol: public ast_node {
 public:
 	ast_symbol() = default;
+	virtual ~ast_symbol() override;
 
 	std::string name;
 	ast_symbol* parent = nullptr;
