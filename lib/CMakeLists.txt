@@ -4,6 +4,7 @@ add_library(milk SHARED
 	"ast/ast_func.cpp"
 	"ast/ast_namespace.cpp"
 	"ast/ast_node.cpp"
+	"ast/ast_str_lit.cpp"
 	"ast/ast_symbol.cpp"
 	"ast/ast_type.cpp"
 	"ast/ast_var.cpp"

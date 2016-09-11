@@ -186,19 +186,24 @@ ast_expr* parse_exp_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs) 
 }
 
 ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer) {
-	ast_expr* expr;
 	switch (lexer.get().type) {
-	case ttype::LPAR:
+	case ttype::LPAR: {
 		lexer.advance();
-		expr = parse_expression(parent, lexer);
+		auto expr = parse_expression(parent, lexer);
 		lexer.expect(ttype::RPAR);
 		lexer.advance();
-		break;
+		return expr;
+	}
+	case ttype::SLIT: {
+		auto expr = new ast_str_lit();
+		expr->value = lexer.get().text;
+		lexer.advance();
+		return expr;
+	}
 	default:
 		std::cerr << lexer.get().ref.pretty_string() << std::endl;
 		throw std::runtime_error("Expected expression");
 	}
-	return expr;
 }
 
 } // namespace milk
