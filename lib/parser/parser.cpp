@@ -200,6 +200,12 @@ ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer) {
 		lexer.advance();
 		return expr;
 	}
+	case ttype::ILIT: {
+		auto expr = new ast_int_lit();
+		expr->value = std::atol(lexer.get().text.c_str());
+		lexer.advance();
+		return expr;
+	}
 	default:
 		std::cerr << lexer.get().ref.pretty_string() << std::endl;
 		throw std::runtime_error("Expected expression");

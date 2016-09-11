@@ -11,6 +11,7 @@
 #include "milk/ast/ast_func.hpp"
 #include "milk/ast/ast_var.hpp"
 #include "milk/ast/ast_str_lit.hpp"
+#include "milk/ast/ast_int_lit.hpp"
 
 #include "milk/io/file.hpp"
 #include "milk/io/file_ref.hpp"

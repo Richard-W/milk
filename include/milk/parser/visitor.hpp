@@ -14,6 +14,7 @@ class ast_namespace;
 class ast_func;
 class ast_var;
 class ast_str_lit;
+class ast_int_lit;
 
 class visitor {
 public:
@@ -27,6 +28,7 @@ public:
 	virtual void visit(ast_func&) {}
 	virtual void visit(ast_var&) {}
 	virtual void visit(ast_str_lit&) {}
+	virtual void visit(ast_int_lit&) {}
 };
 
 } // namespace milk
