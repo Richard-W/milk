@@ -57,12 +57,12 @@ TEST(parser, function_definitions) {
 	ASSERT_EQ("foo", root.children[0]->name);
 	ASSERT_EQ("add", root.children[0]->children[0]->name);
 	ASSERT_EQ("mul", root.children[0]->children[1]->name);
-	ASSERT_EQ("int", dynamic_cast<milk::ast_type_ref*>(dynamic_cast<milk::ast_func*>(root.children[0]->children[0])->return_type)->path[0]);
-	ASSERT_EQ("int", dynamic_cast<milk::ast_type_ref*>(dynamic_cast<milk::ast_func*>(root.children[0]->children[1])->return_type)->path[0]);
-	ASSERT_EQ("int", dynamic_cast<milk::ast_type_ref*>(dynamic_cast<milk::ast_func*>(root.children[0]->children[0])->args[0]->type)->path[0]);
-	ASSERT_EQ("int", dynamic_cast<milk::ast_type_ref*>(dynamic_cast<milk::ast_func*>(root.children[0]->children[0])->args[1]->type)->path[0]);
-	ASSERT_EQ("int", dynamic_cast<milk::ast_type_ref*>(dynamic_cast<milk::ast_func*>(root.children[0]->children[1])->args[0]->type)->path[0]);
-	ASSERT_EQ("int", dynamic_cast<milk::ast_type_ref*>(dynamic_cast<milk::ast_func*>(root.children[0]->children[1])->args[1]->type)->path[0]);
+	ASSERT_EQ("int", dynamic_cast<milk::ast_func*>(root.children[0]->children[0])->return_type->path[0]);
+	ASSERT_EQ("int", dynamic_cast<milk::ast_func*>(root.children[0]->children[1])->return_type->path[0]);
+	ASSERT_EQ("int", dynamic_cast<milk::ast_func*>(root.children[0]->children[0])->args[0]->type->path[0]);
+	ASSERT_EQ("int", dynamic_cast<milk::ast_func*>(root.children[0]->children[0])->args[1]->type->path[0]);
+	ASSERT_EQ("int", dynamic_cast<milk::ast_func*>(root.children[0]->children[1])->args[0]->type->path[0]);
+	ASSERT_EQ("int", dynamic_cast<milk::ast_func*>(root.children[0]->children[1])->args[1]->type->path[0]);
 	ASSERT_EQ("a", dynamic_cast<milk::ast_func*>(root.children[0]->children[0])->args[0]->name);
 	ASSERT_EQ("b", dynamic_cast<milk::ast_func*>(root.children[0]->children[0])->args[1]->name);
 	ASSERT_EQ("a", dynamic_cast<milk::ast_func*>(root.children[0]->children[1])->args[0]->name);

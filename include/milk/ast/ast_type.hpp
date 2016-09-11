@@ -13,13 +13,4 @@ public:
 	virtual void accept(visitor&) override;
 };
 
-class ast_type_ref: public ast_type {
-public:
-	ast_type_ref() = default;
-
-	std::vector<std::string> path;
-
-	virtual void accept(visitor&) override;
-};
-
 } // namespace milk

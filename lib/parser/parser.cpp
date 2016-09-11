@@ -5,6 +5,10 @@
 
 namespace milk {
 
+void parse_namespace(ast_namespace& parent, lexer& lexer);
+void parse_function(ast_symbol& parent, lexer& lexer);
+ast_expr* parse_expression(ast_symbol& parent, lexer& lexer);
+
 void parse_symbol(ast_symbol& parent, lexer& lexer) {
 	switch (lexer.get().type) {
 	case ttype::NS:
@@ -84,11 +88,9 @@ void parse_function(ast_symbol& parent, lexer& lexer) {
 		lexer.advance();
 		lexer.expect(ttype::COL);
 
-		auto type = new ast_type_ref();
-		arg->type = type;
 		do {
 			lexer.advance();
-			type->path.push_back(lexer.expect(ttype::ID).text);
+			arg->type->path.push_back(lexer.expect(ttype::ID).text);
 			lexer.advance();
 		} while (lexer.get().type == ttype::DCOL);
 
@@ -102,11 +104,9 @@ void parse_function(ast_symbol& parent, lexer& lexer) {
 	lexer.advance();
 
 	lexer.expect(ttype::COL);
-	auto type = new ast_type_ref();
-	fn->return_type = type;
 	do {
 		lexer.advance();
-		type->path.push_back(lexer.expect(ttype::ID).text);
+		fn->return_type->path.push_back(lexer.expect(ttype::ID).text);
 		lexer.advance();
 	} while (lexer.get().type == ttype::DCOL);
 
@@ -185,6 +185,8 @@ ast_expr* parse_exp_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs) 
 	}
 }
 
+ast_expr* parse_ref_or_call(ast_symbol& parent, lexer& lexer);
+
 ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer) {
 	switch (lexer.get().type) {
 	case ttype::LPAR: {
@@ -210,6 +212,33 @@ ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer) {
 		std::cerr << lexer.get().ref.pretty_string() << std::endl;
 		throw std::runtime_error("Expected expression");
 	}
+}
+
+ast_call* parse_call(ast_symbol& parent, lexer& lexer, std::vector<std::string> path);
+
+ast_expr* parse_ref_or_call(ast_symbol& parent, lexer& lexer) {
+	std::vector<std::string> path;
+	while (lexer.get().type != ttype::EOS) {
+		path.push_back(lexer.expect(ttype::ID).text);
+		lexer.advance();
+		if (lexer.get().type == ttype::DCOL) {
+			lexer.advance();
+		} else {
+			break;
+		}
+	}
+
+	if (lexer.get().type == ttype::LPAR) {
+		return parse_call(parent, lexer, path);
+	} else {
+		auto ref = new ast_var_ref();
+		ref->var->path = path;
+		return ref;
+	}
+}
+
+ast_call* parse_call(ast_symbol& parent, lexer& lexer, std::vector<std::string> path) {
+
 }
 
 } // namespace milk

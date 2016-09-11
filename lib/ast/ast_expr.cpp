@@ -2,6 +2,14 @@
 
 namespace milk {
 
+ast_expr::ast_expr():
+	type(new ast_sym_ref_type()) {
+}
+
+ast_expr::~ast_expr() {
+	delete type;
+}
+
 void
 ast_expr::accept(visitor& visitor) {
 	visitor.visit(*this);

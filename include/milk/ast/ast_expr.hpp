@@ -4,14 +4,18 @@
 
 #include "ast_node.hpp"
 #include "ast_type.hpp"
+#include "ast_sym_ref.hpp"
 
 namespace milk {
 
+class ast_sym_ref_type;
+
 class ast_expr: public ast_node {
 public:
-	ast_expr() = default;
+	ast_expr();
+	virtual ~ast_expr();
 
-	ast_type* type = nullptr;
+	ast_sym_ref_type* type;
 
 	virtual void accept(visitor&) override;
 };

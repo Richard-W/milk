@@ -1,16 +1,16 @@
 #pragma once
 
-#include "../util/header_guard.hpp"
-
 #include "ast_expr.hpp"
+#include "ast_sym_ref.hpp"
 
 namespace milk {
 
-class ast_int_lit: public ast_expr {
+class ast_var_ref: public ast_expr {
 public:
-	ast_int_lit() = default;
+	ast_var_ref();
+	virtual ~ast_var_ref();
 
-	int64_t value;
+	ast_sym_ref_var* var;
 
 	virtual void accept(visitor&) override;
 };
