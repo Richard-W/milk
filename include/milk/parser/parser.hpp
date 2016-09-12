@@ -6,6 +6,6 @@
 
 namespace milk {
 
-void parse_symbol(ast_symbol& parent, lexer&);
+void parse(ast_symbol& parent, lexer&);
 
 } // namespace milk

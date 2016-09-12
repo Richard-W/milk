@@ -26,10 +26,7 @@ TEST(parser, namespaces) {
 	milk::lexer lexer(file);
 
 	milk::ast_namespace root;
-
-	while (lexer.get().type != milk::ttype::EOS) {
-		milk::parse_symbol(root, lexer);
-	}
+	milk::parse(root, lexer);
 
 	ASSERT_EQ("foo", root.children[0]->name);
 	ASSERT_EQ("foobar", root.children[0]->children[0]->name);
@@ -49,10 +46,7 @@ TEST(parser, function_definitions) {
 	milk::lexer lexer(file);
 
 	milk::ast_namespace root;
-
-	while (lexer.get().type != milk::ttype::EOS) {
-		milk::parse_symbol(root, lexer);
-	}
+	milk::parse(root, lexer);
 
 	ASSERT_EQ("foo", root.children[0]->name);
 	ASSERT_EQ("add", root.children[0]->children[0]->name);
@@ -80,10 +74,7 @@ TEST(parser, order_of_operations) {
 	milk::lexer lexer(file);
 
 	milk::ast_namespace root;
-
-	while (lexer.get().type != milk::ttype::EOS) {
-		milk::parse_symbol(root, lexer);
-	}
+	milk::parse(root, lexer);
 
 	ASSERT_EQ(1, dynamic_cast<milk::ast_int_lit*>(dynamic_cast<milk::ast_bin_expr*>(dynamic_cast<milk::ast_bin_expr*>(dynamic_cast<milk::ast_func*>(root.find_child("a"))->body)->lhs)->lhs)->value);
 	ASSERT_EQ(2, dynamic_cast<milk::ast_int_lit*>(dynamic_cast<milk::ast_bin_expr*>(dynamic_cast<milk::ast_bin_expr*>(dynamic_cast<milk::ast_func*>(root.find_child("a"))->body)->lhs)->rhs)->value);

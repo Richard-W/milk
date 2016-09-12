@@ -12,9 +12,12 @@ add_library(milk SHARED
 	"ast/ast_type.cpp"
 	"ast/ast_var.cpp"
 	"ast/ast_var_ref.cpp"
+	"ast/ast_stmt.cpp"
 	"io/file.cpp"
 	"io/file_ref.cpp"
+	"parser/expr_parser.cpp"
 	"parser/lexer.cpp"
 	"parser/parser.cpp"
+	"parser/symbol_parser.cpp"
 )
 target_compile_definitions(milk PRIVATE __MILK_BUILD)

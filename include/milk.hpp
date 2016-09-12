@@ -15,6 +15,7 @@
 #include "milk/ast/ast_call.hpp"
 #include "milk/ast/ast_sym_ref.hpp"
 #include "milk/ast/ast_var_ref.hpp"
+#include "milk/ast/ast_stmt.hpp"
 
 #include "milk/io/file.hpp"
 #include "milk/io/file_ref.hpp"

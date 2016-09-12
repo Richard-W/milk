@@ -17,6 +17,7 @@ class ast_int_lit;
 class ast_call;
 class ast_sym_ref;
 class ast_var_ref;
+class ast_stmt;
 
 class visitor {
 public:
@@ -33,6 +34,7 @@ public:
 	virtual void visit(ast_call&) {}
 	virtual void visit(ast_sym_ref&) {}
 	virtual void visit(ast_var_ref&) {}
+	virtual void visit(ast_stmt&) {}
 };
 
 } // namespace milk
