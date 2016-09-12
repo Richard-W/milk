@@ -15,7 +15,7 @@ public:
 	virtual ~ast_call();
 
 	ast_sym_ref_func* callee;
-	std::vector<ast_expr> params;
+	std::vector<ast_expr*> params;
 
 	virtual void accept(visitor&) override;
 };

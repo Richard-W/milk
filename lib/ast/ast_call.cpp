@@ -8,6 +8,9 @@ ast_call::ast_call():
 
 ast_call::~ast_call() {
 	delete callee;
+	for (auto param: params) {
+		delete param;
+	}
 }
 
 void

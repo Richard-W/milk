@@ -11,7 +11,7 @@ ast_expr* parse_add_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs =
 ast_expr* parse_mul_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs = nullptr);
 ast_expr* parse_exp_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs = nullptr);
 ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer);
-ast_call* parse_call(ast_symbol& parent, lexer& lexer, std::vector<std::string> path);
+ast_call* parse_call(ast_symbol& parent, lexer& lexer, std::vector<std::string>&& path);
 ast_expr* parse_ref_or_call(ast_symbol& parent, lexer& lexer);
 
 ast_expr* parse_expression(ast_symbol& parent, lexer& lexer) {
@@ -100,6 +100,9 @@ ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer) {
 		lexer.advance();
 		return expr;
 	}
+	case ttype::ID: {
+		return parse_ref_or_call(parent, lexer);
+	}
 	default:
 		std::cerr << lexer.get().ref.pretty_string() << std::endl;
 		throw std::runtime_error("Expected expression");
@@ -119,16 +122,30 @@ ast_expr* parse_ref_or_call(ast_symbol& parent, lexer& lexer) {
 	}
 
 	if (lexer.get().type == ttype::LPAR) {
-		return parse_call(parent, lexer, path);
+		return parse_call(parent, lexer, std::move(path));
 	} else {
 		auto ref = new ast_var_ref();
-		ref->var->path = path;
+		ref->var->path = std::move(path);
 		return ref;
 	}
 }
 
-ast_call* parse_call(ast_symbol& parent, lexer& lexer, std::vector<std::string> path) {
+ast_call* parse_call(ast_symbol& parent, lexer& lexer, std::vector<std::string>&& path) {
+	lexer.expect(ttype::LPAR);
+	auto call = new ast_call();
+	call->callee->path = std::move(path);
+	if (lexer.get(1).type != ttype::RPAR) {
+		do {
+			lexer.advance();
+			call->params.push_back(parse_expression(parent, lexer));
+		} while (lexer.get().type == ttype::COMMA);
+	} else {
+		lexer.advance();
+	}
 
+	lexer.expect(ttype::RPAR);
+	lexer.advance();
+	return call;
 }
 
 } // namespace milk

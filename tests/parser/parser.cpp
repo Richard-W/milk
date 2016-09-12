@@ -68,7 +68,9 @@ TEST(parser, order_of_operations) {
 	os
 		<< "fn a(a: int, b: int): int = 1 + 2 + 3" << std::endl
 		<< "fn b(a: int, b: int): int = 1 + 2 * 3" << std::endl
-		<< "fn c(a: int, b: int): int = (1 + 2) * 3" << std::endl;
+		<< "fn c(a: int, b: int): int = (1 + 2) * 3" << std::endl
+		<< "fn d(): int = 1" << std::endl
+		<< "fn e(a: int): int = 1" << std::endl;
 
 	milk::file file("./parser_order_of_operations.milk");
 	milk::lexer lexer(file);
@@ -87,4 +89,37 @@ TEST(parser, order_of_operations) {
 	ASSERT_EQ(1, dynamic_cast<milk::ast_int_lit*>(dynamic_cast<milk::ast_bin_expr*>(dynamic_cast<milk::ast_bin_expr*>(dynamic_cast<milk::ast_func*>(root.find_child("c"))->body)->lhs)->lhs)->value);
 	ASSERT_EQ(2, dynamic_cast<milk::ast_int_lit*>(dynamic_cast<milk::ast_bin_expr*>(dynamic_cast<milk::ast_bin_expr*>(dynamic_cast<milk::ast_func*>(root.find_child("c"))->body)->lhs)->rhs)->value);
 	ASSERT_EQ(3, dynamic_cast<milk::ast_int_lit*>(dynamic_cast<milk::ast_bin_expr*>(dynamic_cast<milk::ast_func*>(root.find_child("c"))->body)->rhs)->value);
+}
+
+TEST(parser, var_refs) {
+	const std::string fname("./parser_var_refs");
+	std::ofstream os(fname);
+	os
+		<< "fn a(): int = b" << std::endl;
+
+	milk::file file(fname);
+	milk::lexer lexer(file);
+
+	milk::ast_namespace root;
+	milk::parse(root, lexer);
+
+	ASSERT_EQ("b", dynamic_cast<milk::ast_var_ref*>(dynamic_cast<milk::ast_func*>(root.find_child("a"))->body)->var->path[0]);
+}
+
+TEST(parser, calls) {
+	const std::string fname("./parser_calls");
+	std::ofstream os(fname);
+	os
+		<< "fn a(): int = 1 + 2" << std::endl
+		<< "fn b(foo: int): int = a() + foo" << std::endl
+		<< "fn c(foo: int): int = b(foo) * foo" << std::endl
+		<< "fn d(): int = b(5)" << std::endl;
+
+	milk::file file(fname);
+	milk::lexer lexer(file);
+
+	milk::ast_namespace root;
+	milk::parse(root, lexer);
+
+	ASSERT_EQ(5, dynamic_cast<milk::ast_int_lit*>(dynamic_cast<milk::ast_call*>(dynamic_cast<milk::ast_func*>(root.find_child("d"))->body)->params[0])->value);
 }
