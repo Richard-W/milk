@@ -74,6 +74,8 @@ lexer::lexer(const file& file) {
 				tok.type = ttype::NS;
 			} else if (tok.text == "fn") {
 				tok.type = ttype::FN;
+			} else if (tok.text == "return") {
+				tok.type = ttype::RET;
 			} else {
 				tok.type = ttype::ID;
 			}

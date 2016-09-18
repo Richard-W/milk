@@ -13,6 +13,7 @@ enum class ttype {
 	ELSE,
 	FOR,
 	WHILE,
+	RET,
 	EOS,
 	LPAR,
 	RPAR,

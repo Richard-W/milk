@@ -123,3 +123,18 @@ TEST(parser, calls) {
 
 	ASSERT_EQ(5, dynamic_cast<milk::ast_int_lit*>(dynamic_cast<milk::ast_call*>(dynamic_cast<milk::ast_func*>(root.find_child("d"))->body)->params[0])->value);
 }
+
+TEST(parser, blocks) {
+	const std::string fname("./parser_blocks");
+	std::ofstream os(fname);
+	os
+		<< "fn a(): int = {" << std::endl
+		<< "	return 1 + 1 * 2" << std::endl
+		<< "}" << std::endl;
+
+	milk::file file(fname);
+	milk::lexer lexer(file);
+
+	milk::ast_namespace root;
+	milk::parse(root, lexer);
+}
