@@ -2,13 +2,17 @@
 
 #include "../util/header_guard.hpp"
 
-#include "ast_node.hpp"
+#include "ast_expr.hpp"
+
+#include <vector>
 
 namespace milk {
 
-class ast_stmt: public ast_node {
+class ast_block: public ast_expr {
 public:
-	ast_stmt() = default;
+	ast_block() = default;
+
+	std::vector<ast_stmt*> stmt_list;
 
 	virtual void accept(visitor&) override;
 };

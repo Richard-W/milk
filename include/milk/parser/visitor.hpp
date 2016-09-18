@@ -18,6 +18,8 @@ class ast_call;
 class ast_sym_ref;
 class ast_var_ref;
 class ast_stmt;
+class ast_block;
+class ast_ret_stmt;
 
 class visitor {
 public:
@@ -35,6 +37,8 @@ public:
 	virtual void visit(ast_sym_ref&) {}
 	virtual void visit(ast_var_ref&) {}
 	virtual void visit(ast_stmt&) {}
+	virtual void visit(ast_block&) {}
+	virtual void visit(ast_ret_stmt&) {}
 };
 
 } // namespace milk

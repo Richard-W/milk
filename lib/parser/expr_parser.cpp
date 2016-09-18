@@ -1,4 +1,5 @@
 #include "expr_parser.hpp"
+#include "stmt_parser.hpp"
 
 #include <milk.hpp>
 
@@ -78,6 +79,7 @@ ast_expr* parse_exp_expression(ast_symbol& parent, lexer& lexer, ast_expr* lhs) 
 }
 
 ast_expr* parse_ref_or_call(ast_symbol& parent, lexer& lexer);
+ast_block* parse_block(ast_symbol& parent, lexer& lexer);
 
 ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer) {
 	switch (lexer.get().type) {
@@ -102,6 +104,9 @@ ast_expr* parse_primary_expression(ast_symbol& parent, lexer& lexer) {
 	}
 	case ttype::ID: {
 		return parse_ref_or_call(parent, lexer);
+	}
+	case ttype::LBRACE: {
+		return parse_block(parent, lexer);
 	}
 	default:
 		std::cerr << lexer.get().ref.pretty_string() << std::endl;
@@ -146,6 +151,20 @@ ast_call* parse_call(ast_symbol& parent, lexer& lexer, std::vector<std::string>&
 	lexer.expect(ttype::RPAR);
 	lexer.advance();
 	return call;
+}
+
+ast_block* parse_block(ast_symbol& parent, lexer& lexer) {
+	lexer.expect(ttype::LBRACE);
+	lexer.advance();
+
+	auto block = new ast_block();
+	while (lexer.get().type != ttype::EOS && lexer.get().type != ttype::RBRACE) {
+		block->stmt_list.push_back(parse_stmt(parent, lexer));
+	}
+
+	lexer.expect(ttype::RBRACE);
+	lexer.advance();
+	return block;
 }
 
 } // namespace milk

@@ -6,6 +6,7 @@ add_library(milk SHARED
 	"ast/ast_int_lit.cpp"
 	"ast/ast_namespace.cpp"
 	"ast/ast_node.cpp"
+	"ast/ast_ret_stmt.cpp"
 	"ast/ast_str_lit.cpp"
 	"ast/ast_sym_ref.cpp"
 	"ast/ast_symbol.cpp"
@@ -13,11 +14,13 @@ add_library(milk SHARED
 	"ast/ast_var.cpp"
 	"ast/ast_var_ref.cpp"
 	"ast/ast_stmt.cpp"
+	"ast/ast_block.cpp"
 	"io/file.cpp"
 	"io/file_ref.cpp"
 	"parser/expr_parser.cpp"
 	"parser/lexer.cpp"
 	"parser/parser.cpp"
+	"parser/stmt_parser.cpp"
 	"parser/symbol_parser.cpp"
 )
 target_compile_definitions(milk PRIVATE __MILK_BUILD)
